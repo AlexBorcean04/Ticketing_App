@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Plus, Trash2, Calendar, X, LayoutGrid, ArrowUpRight } from "lucide-react";
+import { Plus, Trash2, Calendar, X, LayoutGrid, ArrowUpRight, ShieldCheck, Timer } from "lucide-react";
 import { Link } from "react-router-dom";
 import { api } from "../lib/api";
 
@@ -74,6 +74,52 @@ const AdminPanel = () => {
             <Plus size={22} /> Create Event
           </button>
         </div>
+      </div>
+
+      {/* Summary */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[
+          {
+            label: "Total events",
+            value: status === "ready" ? events.length : "—",
+            helper: "Stored in MongoDB",
+            icon: Calendar,
+          },
+          {
+            label: "Seat safety",
+            value: "Locks on",
+            helper: "Socket.IO sync",
+            icon: ShieldCheck,
+          },
+          {
+            label: "Last refresh",
+            value: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            helper: "Auto reload soon",
+            icon: Timer,
+          },
+        ].map((card) => {
+          const Icon = card.icon;
+          return (
+            <div
+              key={card.label}
+              className="relative overflow-hidden bg-white/[0.03] border border-white/10 rounded-[2.5rem] p-6 shadow-2xl"
+            >
+              <div className="absolute -top-14 -right-14 w-40 h-40 bg-indigo-500/10 blur-[70px] rounded-full" />
+              <div className="relative z-10 flex items-center justify-between gap-4">
+                <div>
+                  <div className="text-xs font-black uppercase tracking-[0.3em] text-slate-500">
+                    {card.label}
+                  </div>
+                  <div className="text-3xl font-black text-white mt-2">{card.value}</div>
+                  <div className="text-sm text-slate-400 font-semibold mt-1">{card.helper}</div>
+                </div>
+                <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-300">
+                  <Icon size={22} />
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Table */}
